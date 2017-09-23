@@ -40,20 +40,20 @@ class PlayerAI:
         # Grow, become stronger
         # Take over the world
         friendly_positions = world.get_position_to_friendly_dict()
-        min_health = [0,0]
+        min_health = [0,1000000000000000000]
         for unit in friendly_units:
             if unit.last_move_result == MoveResult.NEWLY_SPAWNED:
                # if len(friendly_units) > 8:
-                    for tile in World.get_friendly_tiles_around(unit.position):
+                    for tile in world.get_friendly_tiles_around(unit.position):
                         if not (tile.position in friendly_positions):
-                            world.move(unit, tile)
-                            break
-                    for tile in World.get_friendly_tiles_around(unit.position):
+                            world.move(unit, tile.position)
+                            return 0
+                    for tile in world.get_friendly_tiles_around(unit.position):
                         friend = friendly_positions[tile.position]
                         if min_health[1] > friend.health:
-                            min_health = [friend.uuid, friend.health]
+                            min_health = [friend, friend.health]
                     target_friend = world.get_unit(min_health[0])
-                    world.move(unit, target_friend.position)
+                    world.move(unit, (min_health[0]).position)
 
         # every firefly attacks enemy if one tile away
 
