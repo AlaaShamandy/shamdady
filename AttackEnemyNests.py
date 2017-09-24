@@ -42,7 +42,7 @@ class PlayerAI:
 
         for unit in friendly_units:
             pos = world.get_closest_enemy_nest_from(unit.position, None)
-            world.move(unit, pos.position)
+            world.move(unit, pos)
 
         # every firefly attacks enemy if one tile away
 
