@@ -16,20 +16,23 @@ class PlayerAI:
         min_health = [0,1000000000000000000]
         for unit in friendly_units:
 
-            # Attack enemy if one tile away
+#            # Attack enemy if one tile away
+# TODO need to do something with them or else they will do nothing
             closest_enemy = world.get_closest_enemy_from(unit.position, None)
             if (abs(closest_enemy.position[0] - unit.position[0]) == 1) or (abs(closest_enemy.position[1] - unit.position[1]) == 1):
                 neighbors = list(world.get_neighbours(unit.position).values())
                 if closest_enemy.position in neighbors:
                     world.move(unit, closest_enemy.position)
-                    self.doers.append(unit.uuid) #continue attacking in next calls of do_move
+#                    self.doers.append(unit.uuid) #continue attacking in next calls of do_move
                     continue
+
+
 
 
             if unit and  unit.last_move_result == MoveResult.NEWLY_SPAWNED: #units that are newly spawned are positioned over a nest
                # if len(friendly_units) > 8:
                     for tile in world.get_friendly_tiles_around(unit.position):
-                        if not (tile.position in friendly_positions): #Checks if any of the tiles around don't have a fly
+                        if not (tile.position in friendly_positions): #Checks if any of the tiles around don't have a fly TODO
                             world.move(unit, tile.position)
                             return 0
                     for tile in world.get_friendly_tiles_around(unit.position):
@@ -37,6 +40,7 @@ class PlayerAI:
                         if min_health[1] > friend.health:
                             min_health = [friend, friend.health]
                     world.move(unit, (min_health[0]).position)
+
 
     def do_move(self, world, friendly_units, enemy_units):
         """
@@ -64,6 +68,8 @@ class PlayerAI:
             if unit:
 
 
+
+
                 # Attack enemy if one tile away
                 closest_enemy = world.get_closest_enemy_from(unit.position, None)
                 if (abs(closest_enemy.position[0] - unit.position[0]) == 1) or (abs(closest_enemy.position[1] - unit.position[1]) == 1):
@@ -71,9 +77,6 @@ class PlayerAI:
                     if closest_enemy.position in neighbors:
                         world.move(unit, closest_enemy.position)
                         continue
-
-
-
 
 
                 if index < 2: #Collect closest tile
@@ -113,7 +116,12 @@ class PlayerAI:
                     world.move(unit, closest_tile.position)
 
                 # remove from friendly_units
-                friendly_units_copy.remove(unit)
+                if (unit in friendly_units_copy):
+                    friendly_units_copy.remove(unit)
+
+
+
+
 
         self.fill_adjacent_to_nest(world, friendly_units_copy)
 
