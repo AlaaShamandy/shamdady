@@ -42,12 +42,16 @@ class PlayerAI:
         """
         global units_by_age
         for unit in friendly_units:
-            if unit and unit.last_move_result == MoveResult.NEWLY_SPAWNED:
+
+            if unit and unit.last_move_result == MoveResult.NEWLY_SPAWNED: #Adds the newborn as the new youngest of units_by_age
                 units_by_age.append(unit.uuid)
+
         for i in range(len(units_by_age)): #len of friendly_units and units_by_age is supposed to be the same yet there's a lag of 3 turns for replacement of dead flies
+
             if i < 8:
                 #From this point on refer to unit as uni cuz somehow before defining it, it was reading another variable called unit
-                if i < 2:
+
+                if i < 2: #Collect closest tile
                     if world.get_unit(units_by_age[i]) != None: #Checks that the unit isn't dead
                         uni = world.get_unit(units_by_age[i])
                         pos = world.get_closest_capturable_tile_from(uni.position, None)
@@ -56,6 +60,7 @@ class PlayerAI:
                         if len(units_by_age) > 8: # if we're here we replace it with the oldest fly without a task then we pop it to avoid dupicates
                             units_by_age[i] = units_by_age[8]
                             units_by_age.pop(8)
+
                 elif i <3:
                     if world.get_unit(units_by_age[i]) != None:
                         #Integrating NestBuilding at the end cuz it's too long and need to read through it first, for now the 3rd just collects tiles too
@@ -66,7 +71,9 @@ class PlayerAI:
                         if len(units_by_age) > 8:
                             units_by_age[i] = units_by_age[8]
                             units_by_age.pop(8)
-                elif i<4:
+
+                elif i<4: #attack nests
+
                     if world.get_unit(units_by_age[i]) != None:
                         uni = world.get_unit(units_by_age[i])
                         pos = world.get_closest_enemy_nest_from(uni.position, None)
@@ -75,7 +82,8 @@ class PlayerAI:
                         if len(units_by_age) > 8:
                             units_by_age[i] = units_by_age[8]
                             units_by_age.pop(8)
-                elif i<5:
+
+                elif i<5: #attack enemy flies
                     if world.get_unit(units_by_age[i]) != None:
                         uni = world.get_unit(units_by_age[i])
                         closest_enemy = world.get_closest_enemy_from(uni.position, None)
@@ -84,6 +92,7 @@ class PlayerAI:
                         if len(units_by_age) > 8:
                             units_by_age[i] = units_by_age[8]
                             units_by_age.pop(8)
+
                 elif i<6: #doesn't go after nests yet, plus it's probably better off just going after non neutral tiles
                      if world.get_unit(units_by_age[i]) != None:
                         uni = world.get_unit(units_by_age[i])
@@ -93,7 +102,8 @@ class PlayerAI:
                         if len(units_by_age) > 8:
                             units_by_age[i] = units_by_age[8]
                             units_by_age.pop(8)
-                elif i<7:
+
+                elif i<7: #also attacks nests
                     if world.get_unit(units_by_age[i]) != None:
                         uni = world.get_unit(units_by_age[i])
                         pos = world.get_closest_enemy_nest_from(uni.position, None)
@@ -102,7 +112,8 @@ class PlayerAI:
                         if len(units_by_age) > 8:
                             units_by_age[i] = units_by_age[8]
                             units_by_age.pop(8)
-                else:
+
+                else: #attacks enemy tiles
                     if world.get_unit(units_by_age[i]) != None:
                         uni = world.get_unit(units_by_age[i])
                         pos = world.get_closest_enemy_tile_from(uni.position, None)
@@ -128,13 +139,13 @@ class PlayerAI:
 
 
 
-
+        #TODO
         # every firefly attacks enemy if one tile away
 
 
         # first 8
         # 1) first 2 will get closest tile
-        # 2) third will build a nest 5 tiles away
+        #TODO 2) third will build a nest 5 tiles away
         # 3) fourth will attack enemies nests
         # 4) fifth attack weakest enemies
         # 6) sixth get closest neutral tile, if none go after nests.
