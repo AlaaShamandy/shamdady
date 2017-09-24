@@ -37,14 +37,14 @@ class PlayerAI:
         # 2) third will build a nest 5 tiles away
         # 3) fourth will attack enemies nests
         # 4) fifth attack weakest enemies
-        # 6) sixth get closest neutral tile
+        # 6) sixth get closest neutral tile, if none go after nests.
         # 7) seventh attacks enemy nests
         # 8) attack enemy tiles
 
         # more than 8
         # check that all 8 are still alive, otherwise send replacement
         # stock up on all 4 adjacent tiles around nest
-            
+
 
 
 
