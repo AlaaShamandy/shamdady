@@ -9,7 +9,7 @@ class PlayerAI:
         """
         Any instantiation code goes here
         """
-        self.doers = [-1,-1,-1,-1,-1,-1,-1,-1]
+        self.doers = [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
 
     def fill_adjacent_to_nest(self, world, friendly_units):
         friendly_positions = world.get_position_to_friendly_dict()
@@ -19,20 +19,23 @@ class PlayerAI:
 #            # Attack enemy if one tile away
 # TODO need to do something with them or else they will do nothing
             closest_enemy = world.get_closest_enemy_from(unit.position, None)
-            if (abs(closest_enemy.position[0] - unit.position[0]) == 1) or (abs(closest_enemy.position[1] - unit.position[1]) == 1):
+            if (abs(closest_enemy.position[0] - unit.position[0]) == 1) and (abs(closest_enemy.position[1] - unit.position[1]) == 1):
                 neighbors = list(world.get_neighbours(unit.position).values())
                 if closest_enemy.position in neighbors:
                     world.move(unit, closest_enemy.position)
 #                    self.doers.append(unit.uuid) #continue attacking in next calls of do_move
-                    continue
+                    #continue
 
 
 
 
-            if unit and  unit.last_move_result == MoveResult.NEWLY_SPAWNED: #units that are newly spawned are positioned over a nest
+
+
+
+            if unit and  (unit.last_move_result == MoveResult.NEWLY_SPAWNED or unit.position == world.get_closest_friendly_nest_from(unit.position, None)): #units that are newly spawned are positioned over a nest
                # if len(friendly_units) > 8:
                     for tile in world.get_friendly_tiles_around(unit.position):
-                        if not (tile.position in friendly_positions): #Checks if any of the tiles around don't have a fly TODO
+                        if not (tile.position in friendly_positions): #Checks if any of the tiles around don't have a fly : README : FRIENDLY_POSITIONS IS A DICTIONARY WITH THE LOCATION OF ALL FRIENDLY UNITS (CHECK ITS DECLARATION) SO IT DOES WHAT IT'S SUPPOSED TO DO
                             world.move(unit, tile.position)
                             return 0
                     for tile in world.get_friendly_tiles_around(unit.position):
@@ -40,6 +43,9 @@ class PlayerAI:
                         if min_health[1] > friend.health:
                             min_health = [friend, friend.health]
                     world.move(unit, (min_health[0]).position)
+
+
+
 
 
     def do_move(self, world, friendly_units, enemy_units):
@@ -79,13 +85,13 @@ class PlayerAI:
                         continue
 
 
-                if index < 2: #Collect closest tile
+                if index < 4: #Collect closest tile
                     closest_tile = world.get_closest_capturable_tile_from(unit.position, None)
                     world.move(unit, closest_tile.position)
-                elif index < 3: #will be buildNest later, for now it collect closest tile
+                elif index < 5: #will be buildNest later, for now it collect closest tile
                     closest_tile = world.get_closest_capturable_tile_from(unit.position, None)
                     world.move(unit, closest_tile.position)
-                elif index < 4: #make attack nests only if we are winning by 20 points, otherwise collect closest tile
+                elif index < 6: #make attack nests only if we are winning by 20 points, otherwise collect closest tile
                     if (len(world.get_friendly_tiles()) - len(world.get_enemy_tiles()) >= 20):
                         enemy_nest_position = world.get_closest_enemy_nest_from(unit.position, None)
                         world.move(unit, enemy_nest_position)
@@ -93,10 +99,10 @@ class PlayerAI:
                         closest_tile = world.get_closest_capturable_tile_from(unit.position, None)
                         world.move(unit, closest_tile.position)
 
-                elif index < 5: #attack enemy flies
+                elif index < 7: #attack enemy flies TODO CHECK IF THE ENEMY IS RIGHT NEXT TO A NEST CUZ IF SO IT DEFEATS THE GOAL OF ATTAKCING ONLY IF WE'RE WINNING
                     closest_enemy = world.get_closest_enemy_from(unit.position, None)
                     world.move(unit, closest_enemy.position)
-                elif unit and index < 6: #Go after neutral tile, if none go after enemy tiles
+                elif unit and index < 8: #Go after neutral tile, if none go after enemy tiles
                     closest_neutral_tile = world.get_closest_neutral_tile_from(unit.position, None)
                     if (closest_neutral_tile):
                         world.move(unit, closest_neutral_tile.position)
@@ -104,7 +110,7 @@ class PlayerAI:
                         enemy_tile = world.get_closest_capturable_tile_from(unit.position, None)
                         if (enemy_tile):
                             world.move(unit, enemy_tile.position)
-                elif index < 7: #make attack nests only if we are winning by 20 points, otherwise collect closest tile
+                elif index < 13: #make attack nests only if we are winning by 20 points, otherwise collect closest tile #TODO MAKE IT SO THAT ONLY APPLIES IF IT'S THE LAST NEST
                     if (len(world.get_friendly_tiles()) - len(world.get_enemy_tiles()) >= 20):
                         enemy_nest_position = world.get_closest_enemy_nest_from(unit.position, None)
                         world.move(unit, enemy_nest_position)
@@ -124,6 +130,19 @@ class PlayerAI:
 
 
         self.fill_adjacent_to_nest(world, friendly_units_copy)
+
+        for unit in friendly_units:
+
+            if unit.get_next_move_type() == MoveType.REST or unit.last_move_result in [MoveResult.MOVE_INVALID, MoveResult.BLOCKED_BY_NEST, MoveResult.BLOCKED_BY_WALL]:
+                closest_nest = world.get_closest_friendly_nest_from(unit.position, None)
+                if  (abs(closest_nest[0] - unit.position[0]) > 1) or  (abs(closest_nest[1] - unit.position[1]) > 1):
+                    print("Yamaa")
+                    closest_tile = world.get_closest_capturable_tile_from(unit.position, None)
+                    world.move(unit, closest_tile.position)
+                elif (world.get_tile_at(unit.position)).is_permanently_owned():
+                    print("tabla")
+                    closest_tile = world.get_closest_enemy_nest_from(unit.position, None)
+                    world.move(unit, closest_tile)
 
 
 
