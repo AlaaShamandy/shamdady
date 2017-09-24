@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="7550b11d-8691-4192-8761-86271ca2c5ca" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/NestBuilding.py" afterPath="$PROJECT_DIR$/NestBuilding.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/PlayerAI.py" afterPath="$PROJECT_DIR$/PlayerAI.py" />
-    </list>
+    <list default="true" id="7550b11d-8691-4192-8761-86271ca2c5ca" name="Default" comment="" />
     <ignored path="shamdady.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
