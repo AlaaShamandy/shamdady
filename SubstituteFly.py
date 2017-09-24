@@ -5,6 +5,7 @@ from PythonClientAPI.Game.World import World
 
 #Bug : in closed map run, units_by_age lost track of a live firefly and it just remained idle there
 #Possible sol: after looping all in units_by_age check top say 5 healthiest in friendly_units, if they're not in units_by_age add them to the 8th index (friendly units is sorted by health so just check last 5 elements)
+#Outcome of that sol.: bug just takes significantly longer to show up
 
 class PlayerAI:
     global units_by_age # a global list containing units in order of oldest to youngest
@@ -52,7 +53,7 @@ class PlayerAI:
                         pos = world.get_closest_capturable_tile_from(uni.position, None)
                         world.move(uni, pos.position)
                     else:
-                        if len(units_by_age) > 8: # if we're here we replace it with the oldest fly without a task then we pop it to avoid dupicates, depending on when you read this the number might not be 8 due to testing purposes
+                        if len(units_by_age) > 8: # if we're here we replace it with the oldest fly without a task then we pop it to avoid dupicates
                             units_by_age[i] = units_by_age[8]
                             units_by_age.pop(8)
                 elif i <3:
@@ -113,6 +114,12 @@ class PlayerAI:
             else:
                 nesters = [world.get_unit(u) for u in units_by_age[8:]] #gets the remaining unprocessed flies
                 PlayerAI.fill_adjacent_to_nest(self,world, nesters)
+
+        friendly_units.reverse() #In order to fix the bug (read the very top right under imports)
+        for i in range(len(friendly_units)):
+            if friendly_units[0].uuid not in units_by_age:
+                units_by_age.insert(min(8,len(units_by_age)), friendly_units[0].uuid )
+
 
 
 
