@@ -12,8 +12,8 @@ class PlayerAI:
 
     def __init__(self):
         """
-        Any instantiation code goes here
-        """
+            Any instantiation code goes here
+            """
         self.centeredTilePosition = ()
         self.nests = 1
         self.nestStatus = NestStatus.notBuilding # status of nests
@@ -56,11 +56,11 @@ class PlayerAI:
 
                 while friendly_unit.get_next_move_target() == self.centeredTilePosition and index >= 1:
                     world.move(friendly_unit, self.tilesToCover[index])
-                    index+=1
+                    index=1
 
 
                 if not self.tilesToCover: # done with building nests
-                    self.nests += 1
+                    self.nests = 1
                 for position in self.tilesToCover:
                     if  world.get_tile_at(position).is_friendly():
                         self.tilesToCover.remove(position)
@@ -77,12 +77,12 @@ class PlayerAI:
 
     def do_move(self, world, friendly_units, enemy_units):
         """
-        This method will get called every turn.
+            This method will get called every turn.
 
-        :param world: World object reflecting current game state
-        :param friendly_units: list of FriendlyUnit objects
-        :param enemy_units: list of EnemyUnit objects
-        """
+            :param world: World object reflecting current game state
+            :param friendly_units: list of FriendlyUnit objects
+            :param enemy_units: list of EnemyUnit objects
+            """
         # Fly away to freedom, daring fireflies
         # Build thou nests
         # Grow, become stronger
